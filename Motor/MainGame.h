@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Camera2D.h"
 #include "InputManager.h"
+#include<vector>
 
 enum class GameState {
 	PLAY,EXIT
@@ -19,7 +20,7 @@ private:
 	float time;
 	Window window;
 	HLSLProgram program;
-	Sprite sprite;
+	vector<Sprite> sprites;
 	Camera2D camera2D;
 	InputManager inputManager;
 	void init();

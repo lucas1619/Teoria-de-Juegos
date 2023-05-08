@@ -90,14 +90,20 @@ void MainGame::draw() {
 	GLuint imageLocation = program.getUniformLocation("myImage");
 	glUniform1i(imageLocation, 0);
 
-	sprite.draw();
+	for (int i = 0; i < this->sprites.size(); i++) {
+		this->sprites.at(i).draw();
+	}
 	program.unuse();
 	window.swapWindow();
 }
 
 void MainGame::run() {
 	init();
-	sprite.init(-1, -1, 1, 1,"Textures/imagen.png");
+	sprites.push_back(Sprite());
+	sprites.push_back(Sprite());
+	for (int i = 0; i < this->sprites.size(); i++) {
+		this->sprites.at(i).init(-1 * i, 0, 1, 1, "Textures/imagen.png");
+	}
 	update();
 }
 
