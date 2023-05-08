@@ -1,4 +1,5 @@
 #include "MainGame.h"
+#include <ctime>
 #include <iostream>
 #include "Error.h"
 using namespace std;
@@ -7,7 +8,7 @@ MainGame::MainGame() {
 	width = 800;
 	height = 600;
 	gameState = GameState::PLAY;
-	time = 0;
+	_time = 0;
 	camera2D.init(width, height);
 }
 
@@ -82,14 +83,13 @@ void MainGame::draw() {
 	program.use();
 	glActiveTexture(GL_TEXTURE0);
 	GLuint timeLocation = program.getUniformLocation("time");
-	glUniform1f(timeLocation, time);
-	time += 0.002;
+	glUniform1f(timeLocation, _time);
+	_time += 0.002;
 	glm::mat4 cameraMatrix = camera2D.getCameraMatrix();
 	GLuint pCameraLocation = program.getUniformLocation("pCamera");
 	glUniformMatrix4fv(pCameraLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 	GLuint imageLocation = program.getUniformLocation("myImage");
 	glUniform1i(imageLocation, 0);
-
 	for (int i = 0; i < this->sprites.size(); i++) {
 		this->sprites.at(i).draw();
 	}
@@ -99,16 +99,24 @@ void MainGame::draw() {
 
 void MainGame::run() {
 	init();
-	sprites.push_back(Sprite());
-	sprites.push_back(Sprite());
-	for (int i = 0; i < this->sprites.size(); i++) {
-		this->sprites.at(i).init(-1 * i, 0, 1, 1, "Textures/imagen.png");
-	}
 	update();
 }
 
 void MainGame::update() {
+	time_t current_time = time(nullptr);
+	
+	vector<float> values = {-1, 0, 1};
+
+	
 	while (gameState != GameState::EXIT) {
+		time_t new_time = time(nullptr);
+		if (new_time - current_time >= 3) {
+			float x = values[rand() % 3];
+			float y = values[rand() % 3];
+			this->sprites.push_back(Sprite());
+			this->sprites.at(this->sprites.size() - 1).init(x, y, 1, 1, "Textures/imagen.png");
+			current_time = new_time;
+		}
 		draw();
 		processInput();
 	}

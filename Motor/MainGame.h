@@ -17,7 +17,7 @@ class MainGame
 private:
 	int width;
 	int height;
-	float time;
+	float _time;
 	Window window;
 	HLSLProgram program;
 	vector<Sprite> sprites;
